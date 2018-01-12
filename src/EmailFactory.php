@@ -31,6 +31,7 @@ class EmailFactory
         $parser->setText($hordeEmail->getFullMsg());
         $htmlContent = (string) $parser->getMessageBody('html');
         $textContent = (string) $parser->getMessageBody('text');
+        $attachments = (array) $parser->getAttachments();
 
         // Filter HTML body to have only safe HTML
         $htmlContent = trim($this->htmlFilter->purify($htmlContent));
@@ -50,6 +51,14 @@ class EmailFactory
                 $from[] = new EmailAddress($hordeFrom->bare_address, $hordeFrom->personal);
             }
         }
+        $reply_to = [];
+        foreach ($envelope->reply_to as $hordeReplyTo) {
+            /** @var Horde_Mail_Rfc822_Address $hordeTo */
+            if ($hordeReplyTo->bare_address) {
+                $reply_to[] = new EmailAddress($hordeReplyTo->bare_address, $hordeReplyTo->personal);
+            }
+        }
+        
         $to = [];
         foreach ($envelope->to as $hordeTo) {
             /** @var Horde_Mail_Rfc822_Address $hordeTo */
@@ -70,7 +79,9 @@ class EmailFactory
             $textContent,
             $from,
             $to,
-            $inReplyTo
+            $inReplyTo,
+            $attachments,
+            $reply_to
         );
 
         $date = new DateTime();

@@ -66,7 +66,18 @@ class Email
      * @var string|null
      */
     private $inReplyTo;
-
+    
+    /**
+     *
+     * @var attachments[] 
+     */
+    private $attachments = [];
+    /**
+     * 
+     * @ver reply-to[]
+     */
+    private $replyTo = [];
+    
     /**
      * @param string|null $messageId
      * @param EmailAddress[] $from
@@ -82,7 +93,9 @@ class Email
         string $textContent,
         array $from = [],
         array $to = [],
-        $inReplyTo
+        $inReplyTo,
+        array $attachments = [],
+        array $replyTo = []
     ) {
         $this->uid = $uid;
         $this->messageId = $messageId;
@@ -93,6 +106,8 @@ class Email
         $this->from = $from;
         $this->to = $to;
         $this->inReplyTo = $inReplyTo;
+        $this->attachments = $attachments;
+        $this->replyTo = $replyTo;
     }
 
     /**
@@ -187,5 +202,20 @@ class Email
     public function getInReplyTo()
     {
         return $this->inReplyTo;
+    }
+    
+    /**
+     *@return array Returns the attachments contents 
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+    
+    /**
+     * @return reply-to emailAddress[]
+     */
+    public function getReplyTo(){
+        return $this->replyTo;
     }
 }
