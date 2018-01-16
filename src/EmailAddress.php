@@ -39,6 +39,11 @@ class EmailAddress
     {
         return $this->name;
     }
+    
+    public function setName($name)
+    {
+         $this->name = $name;
+    }
 
     public function getNameOrEmail() : string
     {
